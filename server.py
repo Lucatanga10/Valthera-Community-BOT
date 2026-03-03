@@ -9,12 +9,10 @@ REDIRECT_URI = os.getenv("REDIRECT_URI")
 app = Flask(__name__)
 HTML_SUCCESS = open("index.html", encoding="utf-8").read()
 
-@app.route("/callback")
-def callback():
-    code = request.args.get("code")
-    if not code:
-        return "❌ No code provided", 400
-
+@app.route("/")
+def index():
+    return "VerifyBot is running! ✅"
+    
     # Exchange code for token
     data = {
         "client_id": CLIENT_ID,
@@ -54,4 +52,5 @@ def callback():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
 
