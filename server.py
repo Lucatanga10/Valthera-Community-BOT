@@ -32,7 +32,7 @@ def get_oauth_url():
 class VerifyView(View):
     def __init__(self):
         super().__init__(timeout=None)
-        self.add_item(Button(label="✅  Verify / Verifica", style=discord.ButtonStyle.link, url=get_oauth_url()))
+        self.add_item(Button(label="<a:Discord_Verify_Green:1371774853367070780>  Verify", style=discord.ButtonStyle.link, url=get_oauth_url()))
 
 @bot.event
 async def on_ready():
