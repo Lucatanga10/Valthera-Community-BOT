@@ -51,7 +51,6 @@ async def setup_verify(ctx):
     embed = discord.Embed(color=0x5865F2)
     embed.add_field(name="🇬🇧  Server Verification", value="Click the button below to verify and gain access to the server.\nYou will be redirected to Discord to authorize your account.", inline=False)
     embed.add_field(name="\u200b", value="\u200b", inline=False)
-    embed.add_field(name="🇮🇹  Verifica del server", value="Clicca sul pulsante qui sotto per verificare e ottenere l'accesso al server.\nVerrai reindirizzato su Discord per autorizzare il tuo account.", inline=False)
     embed.set_footer(text="Powered by VerifyBot")
     await ctx.send(embed=embed, view=VerifyView())
     try:
