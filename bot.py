@@ -66,10 +66,10 @@ async def setup_verify(ctx):
     )
     embed.set_footer(text="Powered by VerifyBot")
     await ctx.send(embed=embed, view=VerifyView())
-try:
-    await ctx.message.delete()
-except:
-    pass
+    try:
+        await ctx.message.delete()
+    except:
+        pass
 
 
 async def grant_verified_role(user_id: int):
@@ -97,4 +97,3 @@ async def grant_verified_role(user_id: int):
 
 
 bot.run(TOKEN)
-
