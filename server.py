@@ -82,7 +82,8 @@ def index():
 def callback():
     code = request.args.get("code")
     if not code:
-        return "❌ No code provided", 400
+        return render_template_string(HTML_SUCCESS, username="Unknown", success=False)
+
     data = {
         "client_id": CLIENT_ID,
         "client_secret": CLIENT_SECRET,
@@ -90,26 +91,33 @@ def callback():
         "code": code,
         "redirect_uri": REDIRECT_URI,
     }
-    r = requests.post("https://discord.com/api/oauth2/token", data=data, headers={"Content-Type": "application/x-www-form-urlencoded"})
+    r = requests.post(
+        "https://discord.com/api/oauth2/token",
+        data=data,
+        headers={"Content-Type": "application/x-www-form-urlencoded"}
+    )
+    
+    print(f"Discord response: {r.status_code} - {r.text}")
+    
+    if not r.text or r.status_code != 200:
+        return render_template_string(HTML_SUCCESS, username="Unknown", success=False)
+    
     token_data = r.json()
     access_token = token_data.get("access_token")
     if not access_token:
         return render_template_string(HTML_SUCCESS, username="Unknown", success=False)
-    user = requests.get("https://discord.com/api/users/@me", headers={"Authorization": f"Bearer {access_token}"}).json()
+
+    user = requests.get(
+        "https://discord.com/api/users/@me",
+        headers={"Authorization": f"Bearer {access_token}"}
+    ).json()
     user_id = int(user["id"])
     username = user.get("username", "Unknown")
+
     future = asyncio.run_coroutine_threadsafe(grant_verified_role(user_id), bot.loop)
     try:
         success = future.result(timeout=10)
     except:
         success = False
+
     return render_template_string(HTML_SUCCESS, username=username, success=success)
-
-def run_bot():
-    bot.run(TOKEN)
-
-if __name__ == "__main__":
-    t = threading.Thread(target=run_bot, daemon=True)
-    t.start()
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
